@@ -40,8 +40,7 @@ def reviewMode():
         user = input()
         if (user.upper() == 'Q'): return
 
-"""while (user.upper() != 'Q'):
+while (user.upper() != 'Q'):
     user = input("What mode would you like:\nFlashcard Mode (F)\nReview Mode (R)\nQuit (Q)\n")
     if (user.upper() == 'F'): flashcardMode()
     if (user.upper() == 'R'): reviewMode()
-"""
