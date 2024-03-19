@@ -6,10 +6,10 @@ document.getElementById("next").addEventListener("click", function () {
 
 async function flashcard() {
     let char = document.getElementById("char").textContent;
-    let def = document.getElementById("def").textContent;
+    let answer = document.getElementById("answer").textContent;
     let params = new FormData();
     params.append("char", char);
-    params.append("def", def);
+    params.append("answer", answer);
 
     fetch("/flashcard", { method: "POST", body: params })
         .then(statusCheck)
