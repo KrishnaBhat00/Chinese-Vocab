@@ -1,4 +1,4 @@
-#from Reader import vocabs
+from Reader import vocabs
 from flask import Flask, render_template, request
 
 # if the name changes it should be run with --app
