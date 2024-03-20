@@ -9,9 +9,7 @@ App.py runs a Flask web app locally and will probably become the main version.
 
 
 TODO:
-- get pandas working
-- move vocab to a db (sqlite)
-- properly implement vocab set
+- implement reader mode
 - implement UI
 - implement success statistics (self determined)
 - clean and add requirements.txt

@@ -2,6 +2,7 @@ import sqlite3
 from sqlite3 import Error
 import json
 from flask import Flask, render_template, request
+import random
 
 # if the name changes it should be run with --app
 app = Flask(__name__,template_folder='..\\templates',static_folder='..\\static')
@@ -21,17 +22,18 @@ def create_connection(db_file):
 conn = create_connection(database)
 
 
-def getNext(form):
+def nextFlashcard(form):
     cur = conn.cursor()
+    count = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     if not form["id"] or not (not form["answer"]):
-        id = 4
-        output = cur.execute(statement, (4,)).fetchone()[1]
+        id = random.randint(1, count)
+        output = cur.execute(statement, (id,)).fetchone()
         json_data = json.dumps({"id":id, "char":output[1], "answer":""})
     else: 
-        id = 4
-        output = cur.execute(statement, (form['id'],)).fetchone()
+        id = form['id']
+        output = cur.execute(statement, (id,)).fetchone()
         answer = f"{output[2]}\t{output[3]}"
         json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
     return json_data
@@ -49,7 +51,7 @@ def flashcard():
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     id = 0
-    return getNext(request.form)
+    return nextFlashcard(request.form)
 
 if __name__ == '__main__':
     app.run(debug=True)
