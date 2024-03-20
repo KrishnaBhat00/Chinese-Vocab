@@ -9,7 +9,6 @@ App.py runs a Flask web app locally. Currently features only a flashcard mode (c
 
 
 TODO:
-- add reader mode
 - clean and add requirements.txt
 - search
 - secure

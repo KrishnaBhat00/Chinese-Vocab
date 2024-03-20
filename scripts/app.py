@@ -54,6 +54,24 @@ def nextFlashcard(form):
         json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
     return json_data
 
+def nextReader(form):
+    cur = conn.cursor()
+    count = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
+    statement = "SELECT * FROM vocabs WHERE id=?"
+    output = ""
+    if not form["id"] or not (not form["answer"]):
+        updateUsage(form, cur)
+        if not form['id'] or int(form['id']) + 1 > count: currId = 0
+        else: currId = int(form['id'])
+        id = currId + 1
+        output = cur.execute(statement, (id,)).fetchone()
+        json_data = json.dumps({"id":id, "char":output[1], "answer":""})
+    else:
+        id = form['id']
+        output = cur.execute(statement, (id,)).fetchone()
+        answer = f"{output[2]}\n{output[3]}"
+        json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
+    return json_data
 
 
 @app.route('/', methods=['GET'])
@@ -66,6 +84,13 @@ def flashcard():
         return nextFlashcard(request.form)
     else:
         return render_template('flashcard.html')
+
+@app.route("/reader", methods=['GET', 'POST'])
+def reader():
+    if (request.method == 'POST'):
+        return nextReader(request.form)
+    else:
+        return render_template('reader.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

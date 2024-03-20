@@ -17,12 +17,14 @@ function removeSuccessBttns() {
 }
 
 document.getElementById("next").addEventListener("click", function () {
-    console.log("next");
-    flashcard(null);
+    endpoint = window.location.href;
+    endpoint = endpoint.split("/")[3];
+    flashcard(null, endpoint);
+
 });
 
 
-async function flashcard(success) {
+async function flashcard(success, endpoint) {
     let id = document.getElementById("id").textContent;
     let char = document.getElementById("char").textContent;
     let answer = document.getElementById("answer").textContent;
@@ -32,7 +34,7 @@ async function flashcard(success) {
     params.append("answer", answer);
     params.append("success", success);
 
-    fetch("/flashcard", { method: "POST", body: params })
+    fetch("/" + endpoint, { method: "POST", body: params })
         .then(statusCheck)
         .then(resp => resp.json())
         .then(function (resp) {
