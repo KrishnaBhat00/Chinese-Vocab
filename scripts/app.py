@@ -62,7 +62,6 @@ def index():
 
 @app.route("/flashcard", methods=['GET', 'POST'])
 def flashcard():
-    print(request.form)
     if (request.method == 'POST'):
         return nextFlashcard(request.form)
     else:
