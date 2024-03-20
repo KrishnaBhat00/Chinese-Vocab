@@ -1,0 +1,49 @@
+html {
+    height: 100%;
+    margin: auto;
+}
+
+body {
+    text-align: center;
+    font-size: 40px;
+    padding: 40px;
+    background-color: #e39732;
+}
+
+.btn {
+    border-color: black;
+    border-width: 3px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 3px black;
+    font-size: 40px;
+    padding: 30px;
+    margin: 4px 4px;
+    color: black;
+    margin: 4px 2px;
+}
+
+.nav {
+    text-decoration: none;
+    background-color: white;
+
+}
+
+#yes {
+    background-color: green;
+}
+
+#no {
+    background-color: red;
+}
+
+.links {
+    text-shadow: 100;
+}
+
+.footer {
+    text-decoration: none;
+    font-size: small;
+    margin: 5px;
+    padding-top: 40px;
+    text-align: center;
+}

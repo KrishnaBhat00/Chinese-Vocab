@@ -28,13 +28,14 @@ def nextFlashcard(form):
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     if not form["id"] or not (not form["answer"]):
+        print (form['success'])
         id = random.randint(1, count)
         output = cur.execute(statement, (id,)).fetchone()
         json_data = json.dumps({"id":id, "char":output[1], "answer":""})
-    else: 
+    else:
         id = form['id']
         output = cur.execute(statement, (id,)).fetchone()
-        answer = f"{output[2]}\t{output[3]}"
+        answer = f"{output[2]}\n{output[3]}"
         json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
     return json_data
 
@@ -44,14 +45,13 @@ def nextFlashcard(form):
 def index():
     return render_template('index.html')
 
-@app.route("/flashcard", methods=['POST'])
+@app.route("/flashcard", methods=['GET', 'POST'])
 def flashcard():
     print(request.form)
-    c = conn.cursor()
-    statement = "SELECT * FROM vocabs WHERE id=?"
-    output = ""
-    id = 0
-    return nextFlashcard(request.form)
+    if (request.method == 'POST'):
+        return nextFlashcard(request.form)
+    else:
+        return render_template('flashcard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
