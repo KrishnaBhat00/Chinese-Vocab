@@ -3,7 +3,7 @@ from pytreemap import TreeMap
 import Vocab
 import random
 
-sheet = pd.read_excel('C:\\Users\\aweso\Documents\Chinese Vocab\static\Chinese Vocab Community.xlsx', sheet_name=0)
+sheet = pd.read_excel(r'C:\Users\aweso\Documents\Chinese Vocab\static\Chinese Vocab Community.xlsx', sheet_name=0)
 
 print(sheet)
 

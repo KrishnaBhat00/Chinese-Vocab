@@ -7,7 +7,7 @@ def create_connection(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file)
-        print(sqlite3.sqlite_version)
+        print(f"{sqlite3.sqlite_version=}")
         return conn
     except Error as e:
         print(e)
@@ -21,7 +21,7 @@ def create_table(conn, statement):
         print(e)
 
 def createVocab(conn, vocab):
-    statement = f"INSERT INTO vocabs(chars, pinyin, def) VALUES(?,?,?)"
+    statement = f"INSERT INTO vocabs(chars, pinyin, def, totalAsked, correct) VALUES(?,?,?,?,?)"
     c = conn.cursor()
     c.execute(statement, vocab)
     conn.commit()
@@ -30,10 +30,12 @@ def createVocab(conn, vocab):
 def main():
     database = r"C:\Users\aweso\Documents\Chinese Vocab\databases\vocabs.db"
     sql_create_vocabs = """ CREATE TABLE IF NOT EXISTS vocabs (
-        id integer PRIMARY KEY,x
+        id integer PRIMARY KEY,
         chars text NOT NULL,
         pinyin text,
-        def text
+        def text,
+        totalAsked integer,
+        correct integer
     );"""
     conn = create_connection(database)
     if conn is not None:
@@ -42,7 +44,7 @@ def main():
         print("error, cannot connect to database")
 
     for i in vocabs:
-        vocab = (vocabs[i].getChars(), vocabs[i].getPinyin(), vocabs[i].getDefin())
+        vocab = (vocabs[i].getChars(), vocabs[i].getPinyin(), vocabs[i].getDefin(), 0, 0)
         createVocab(conn, vocab)
 
 if __name__ == '__main__':

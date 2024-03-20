@@ -28,7 +28,20 @@ def nextFlashcard(form):
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     if not form["id"] or not (not form["answer"]):
-        print (form['success'])
+        if form['success'] != 'null':
+            update = """UPDATE vocabs SET totalAsked = ?, correct = ? WHERE id=?"""
+            currentInfo = "SELECT * FROM vocabs WHERE id=?"
+            output = cur.execute(currentInfo, (form['id'], )).fetchone()
+            total = int(output[4])
+            correct = int(output[5])
+            print (total, correct, form['success'])
+            total += 1
+            if form['success'] == 'yes':
+                correct += 1
+                cur.execute(update, (total, correct, form['id']))
+            if form['success'] == 'no':
+                cur.execute(update, (total, correct, form['id']))
+            conn.commit()
         id = random.randint(1, count)
         output = cur.execute(statement, (id,)).fetchone()
         json_data = json.dumps({"id":id, "char":output[1], "answer":""})
