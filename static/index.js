@@ -5,18 +5,22 @@ document.getElementById("next").addEventListener("click", function () {
 
 
 async function flashcard() {
+    let id = document.getElementById("id").textContent;
     let char = document.getElementById("char").textContent;
     let answer = document.getElementById("answer").textContent;
     let params = new FormData();
+    params.append("id", id);
     params.append("char", char);
     params.append("answer", answer);
 
     fetch("/flashcard", { method: "POST", body: params })
         .then(statusCheck)
-        .then(resp => resp.text())
+        .then(resp => resp.json())
         .then(function (resp) {
             console.log(resp);
-            if (document.getElementById("char").innerHTML = resp);
+            document.getElementById("id").innerHTML = resp["id"];
+            document.getElementById("char").innerHTML = resp["char"];
+            document.getElementById("answer").innerHTML = resp["answer"];
         })
 }
 
