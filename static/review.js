@@ -1,11 +1,11 @@
-function addSuccessBttns(val) {
+function addSuccessBttns(val, endpoint) {
     var element = document.createElement("button")
     element.textContent = val;
     element.name = val;
     element.id = val;
     element.className = "btn";
     element.onclick = function () {
-        flashcard(val)
+        flashcard(val, endpoint)
     };
     var div = document.getElementById("success");
     div.appendChild(element);
@@ -40,8 +40,8 @@ async function flashcard(success, endpoint) {
         .then(function (resp) {
             console.log(resp);
             if (resp['answer'] != '') {
-                addSuccessBttns("yes");
-                addSuccessBttns("no");
+                addSuccessBttns("yes", endpoint);
+                addSuccessBttns("no", endpoint);
             }
             else {
                 removeSuccessBttns();
