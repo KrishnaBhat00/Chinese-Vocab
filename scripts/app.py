@@ -3,11 +3,14 @@ from sqlite3 import Error
 import json
 from flask import Flask, render_template, request
 import random
+import os
 
 # if the name changes it should be run with --app
-app = Flask(__name__,template_folder='..\\templates',static_folder='..\\static')
 
-database = r"C:\Users\aweso\Documents\Chinese Vocab\databases\vocabs.db"
+path = os.getcwd()
+app = Flask(__name__,template_folder=path + r'\templates',static_folder=path +r'\static')
+
+database = path + r"\databases\vocabs.db"
 
 def create_connection(db_file):
     """ create a database connection to a SQLite database """
@@ -50,7 +53,7 @@ def nextFlashcard(form):
     else:
         id = form['id']
         output = cur.execute(statement, (id,)).fetchone()
-        answer = f"{output[2]}\n{output[3]}"
+        answer = f"Pinyin: {output[2]}<br>Definition: {output[3]}"
         json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
     return json_data
 

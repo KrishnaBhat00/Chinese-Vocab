@@ -2,8 +2,10 @@ import pandas as pd
 from pytreemap import TreeMap
 import Vocab
 import random
+import os
 
-sheet = pd.read_excel(r'C:\Users\aweso\Documents\Chinese Vocab\static\Chinese Vocab Community.xlsx', sheet_name=0)
+path = os.getcwd()
+sheet = pd.read_excel(path + r'static\Chinese Vocab Community.xlsx', sheet_name=0)
 
 print(sheet)
 

@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from sqlite3 import Error
 from Reader import vocabs
 
@@ -28,7 +29,8 @@ def createVocab(conn, vocab):
 
 
 def main():
-    database = r"C:\Users\aweso\Documents\Chinese Vocab\databases\vocabs.db"
+    path = os.getcwd()
+    database = path + r"databases\vocabs.db"
     sql_create_vocabs = """ CREATE TABLE IF NOT EXISTS vocabs (
         id integer PRIMARY KEY,
         chars text NOT NULL,

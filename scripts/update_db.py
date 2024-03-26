@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 from Reader import vocabs
+import os
 
 def create_connection(db_file):
     conn = None
@@ -36,7 +37,8 @@ def check_same(conn, i):
         conn.commit()
 
 def main():
-    database = r"C:\Users\aweso\Documents\Chinese Vocab\databases\vocabs.db"
+    path = os.getcwd()
+    database = path + r"databases\vocabs.db"
     conn = create_connection(database)
     for i in vocabs:
         check_same(conn, i + 1)
