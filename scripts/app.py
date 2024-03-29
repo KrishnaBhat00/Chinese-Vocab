@@ -8,9 +8,11 @@ import os
 # if the name changes it should be run with --app
 
 path = os.getcwd()
-app = Flask(__name__,template_folder=path + r'\templates',static_folder=path +r'\static')
+templates = r"\templates" if platform.system() == 'Windows' else r"/templtes"
+static = r"\static" if platform.system() == 'Windows' else r"/static"
+app = Flask(__name__,template_folder=path + templates,static_folder=path + static)
 
-database = path + r"\databases\vocabs.db"
+database = path + r"\databases\vocabs.db" if platform.system() == 'Windows' else path + r"/databases/vocabs.db"
 
 def create_connection(db_file):
     """ create a database connection to a SQLite database """
