@@ -14,3 +14,5 @@ TODO:
 - secure
 
 This is my first attempt at web development so its neither optimal nor clean.
+
+**This app is configured for DEBUG mode and therefore should not be public facing unless that setting is altered**
