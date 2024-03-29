@@ -30,7 +30,7 @@ def createVocab(conn, vocab):
 
 def main():
     path = os.getcwd()
-    database = path + r"databases\vocabs.db"
+    database = path + r"\databases\vocabs.db"
     sql_create_vocabs = """ CREATE TABLE IF NOT EXISTS vocabs (
         id integer PRIMARY KEY,
         chars text NOT NULL,

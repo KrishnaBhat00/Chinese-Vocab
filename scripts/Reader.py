@@ -5,7 +5,7 @@ import random
 import os
 
 path = os.getcwd()
-sheet = pd.read_excel(path + r'static\Chinese Vocab Community.xlsx', sheet_name=0)
+sheet = pd.read_excel(path + r'\static\Chinese Vocab Community.xlsx', sheet_name=0)
 
 print(sheet)
 
