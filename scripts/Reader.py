@@ -3,6 +3,7 @@ from pytreemap import TreeMap
 import Vocab
 import random
 import os
+import platform
 
 path = os.getcwd()
 path += r"\static\Chinese Vocab Community.xlsx" if platform.system() == 'Windows' else r"/static/Chinese Vocab Community.xlsx"

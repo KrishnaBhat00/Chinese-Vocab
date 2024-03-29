@@ -4,6 +4,7 @@ import json
 from flask import Flask, render_template, request
 import random
 import os
+import platform
 
 # if the name changes it should be run with --app
 
