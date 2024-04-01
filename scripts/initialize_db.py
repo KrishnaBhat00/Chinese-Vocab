@@ -31,9 +31,7 @@ def createVocab(conn, vocab):
 def main():
     path = os.getcwd()
     database = os.path.join(path, "databases", "vocabs.db")
-    if (os.path.exists(database)): print("databases exists")
-    else: 
-        os.mkdir(os.path.join(os.getcwd(),"database"))
+    if not os.path.exists(database): os.mkdir(os.path.join(os.getcwd(),"databases"))
     sql_create_vocabs = """ CREATE TABLE IF NOT EXISTS vocabs (
         id integer PRIMARY KEY,
         chars text NOT NULL,
