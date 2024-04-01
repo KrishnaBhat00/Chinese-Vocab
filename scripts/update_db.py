@@ -2,7 +2,6 @@ import sqlite3
 from sqlite3 import Error
 from Reader import vocabs
 import os
-import platform
 
 def create_connection(db_file):
     conn = None
@@ -39,7 +38,7 @@ def check_same(conn, i):
 
 def main():
     path = os.getcwd()
-    database = path + r"\databases\vocabs.db" if platform.system() == 'Windows' else path + r"/databases/vocabs.db"
+    database = os.path.join(path, "databases", "vocabs.db")
     conn = create_connection(database)
     for i in vocabs:
         check_same(conn, i + 1)

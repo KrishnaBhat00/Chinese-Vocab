@@ -9,11 +9,13 @@ import platform
 # if the name changes it should be run with --app
 
 path = os.getcwd()
-templates = r"\templates" if platform.system() == 'Windows' else r"/templtes"
-static = r"\static" if platform.system() == 'Windows' else r"/static"
-app = Flask(__name__,template_folder=path + templates,static_folder=path + static)
+templates = os.path.join(path, "templates")
+static = os.path.join(path, "static")
+app = Flask(__name__,template_folder=templates,static_folder=static)
 
-database = path + r"\databases\vocabs.db" if platform.system() == 'Windows' else path + r"/databases/vocabs.db"
+database = os.path.join(path, "databases", "vocabs.db")
+
+print(f"{templates=}\n{static=}\n{database=}")
 
 def create_connection(db_file):
     """ create a database connection to a SQLite database """

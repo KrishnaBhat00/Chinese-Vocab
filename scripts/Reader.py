@@ -3,10 +3,8 @@ from pytreemap import TreeMap
 import Vocab
 import random
 import os
-import platform
 
-path = os.getcwd()
-path += r"\static\Chinese Vocab Community.xlsx" if platform.system() == 'Windows' else r"/static/Chinese Vocab Community.xlsx"
+path = os.path.join(os.getcwd(), "static", "Chinese Vocab Community.xlsx")
 sheet = pd.read_excel(path, sheet_name=0)
 
 print(sheet)

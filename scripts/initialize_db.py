@@ -1,6 +1,5 @@
 import sqlite3
 import os
-import platform
 from sqlite3 import Error
 from Reader import vocabs
 
@@ -23,7 +22,7 @@ def create_table(conn, statement):
         print(e)
 
 def createVocab(conn, vocab):
-    statement = f"INSERT INTO vocabs(chars, pinyin, def, totalAsked, correct) VALUES(?,?,?,?,?)"
+    statement = "INSERT INTO vocabs(chars, pinyin, def, totalAsked, correct) VALUES(?,?,?,?,?)"
     c = conn.cursor()
     c.execute(statement, vocab)
     conn.commit()
@@ -31,7 +30,10 @@ def createVocab(conn, vocab):
 
 def main():
     path = os.getcwd()
-    database = path + r"\databases\vocabs.db" if platform.system() == 'Windows' else path + r"/databases/vocabs.db"
+    database = os.path.join(path, "databases", "vocabs.db")
+    if (os.path.exists(database)): print("databases exists")
+    else: 
+        os.mkdir(os.path.join(os.getcwd(),"database"))
     sql_create_vocabs = """ CREATE TABLE IF NOT EXISTS vocabs (
         id integer PRIMARY KEY,
         chars text NOT NULL,
@@ -41,14 +43,14 @@ def main():
         correct integer
     );"""
     conn = create_connection(database)
-    if conn is not None:
-        create_table(conn, sql_create_vocabs)
-    else:
-        print("error, cannot connect to database")
+    # if conn is not None:
+    #     create_table(conn, sql_create_vocabs)
+    # else:
+    #     print("error, cannot connect to database")
 
-    for i in vocabs:
-        vocab = (vocabs[i].getChars(), vocabs[i].getPinyin(), vocabs[i].getDefin(), 0, 0)
-        createVocab(conn, vocab)
+    # for i in vocabs:
+    #     vocab = (vocabs[i].getChars(), vocabs[i].getPinyin(), vocabs[i].getDefin(), 0, 0)
+    #     createVocab(conn, vocab)
 
 if __name__ == '__main__':
     main()
