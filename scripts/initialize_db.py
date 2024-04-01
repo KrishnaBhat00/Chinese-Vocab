@@ -41,14 +41,14 @@ def main():
         correct integer
     );"""
     conn = create_connection(database)
-    # if conn is not None:
-    #     create_table(conn, sql_create_vocabs)
-    # else:
-    #     print("error, cannot connect to database")
+    if conn is not None:
+        create_table(conn, sql_create_vocabs)
+    else:
+        print("error, cannot connect to database")
 
-    # for i in vocabs:
-    #     vocab = (vocabs[i].getChars(), vocabs[i].getPinyin(), vocabs[i].getDefin(), 0, 0)
-    #     createVocab(conn, vocab)
+    for i in vocabs:
+        vocab = (vocabs[i].getChars(), vocabs[i].getPinyin(), vocabs[i].getDefin(), 0, 0)
+        createVocab(conn, vocab)
 
 if __name__ == '__main__':
     main()
