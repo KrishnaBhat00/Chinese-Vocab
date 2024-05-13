@@ -5,6 +5,7 @@ from flask import Flask, render_template, request
 import random
 import os
 import platform
+import bleach
 
 # if the name changes it should be run with --app
 
@@ -14,8 +15,6 @@ static = os.path.join(path, "static")
 app = Flask(__name__,template_folder=templates,static_folder=static)
 
 database = os.path.join(path, "databases", "vocabs.db")
-
-print(f"{templates=}\n{static=}\n{database=}")
 
 def create_connection(db_file):
     """ create a database connection to a SQLite database """
@@ -46,6 +45,7 @@ def updateUsage(form, cur):
 
 
 def nextFlashcard(form):
+    print(form)
     cur = conn.cursor()
     count = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
     statement = "SELECT * FROM vocabs WHERE id=?"
@@ -58,8 +58,10 @@ def nextFlashcard(form):
     else:
         id = form['id']
         output = cur.execute(statement, (id,)).fetchone()
+        #char = bleach.clean(form['char'])
+        char = output[1]
         answer = f"Pinyin: {output[2]}<br>Definition: {output[3]}"
-        json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
+        json_data = json.dumps({"id":id, "char":char,"answer":answer})
     return json_data
 
 def nextReader(form):
@@ -77,8 +79,9 @@ def nextReader(form):
     else:
         id = form['id']
         output = cur.execute(statement, (id,)).fetchone()
+        char = output[1]
         answer = f"{output[2]}\n{output[3]}"
-        json_data = json.dumps({"id":id, "char":form["char"],"answer":answer})
+        json_data = json.dumps({"id":id, "char":char,"answer":answer})
     return json_data
 
 
