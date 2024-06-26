@@ -17,7 +17,7 @@ app = Flask(__name__,template_folder=templates,static_folder=static)
 database = os.path.join(path, "databases", "vocabs.db")
 
 def create_connection(db_file):
-    """ create a database connection to a SQLite database """
+    # create a database connection to a SQLite database
     conn = None
     try:
         conn = sqlite3.connect(db_file, check_same_thread=False)
