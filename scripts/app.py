@@ -64,14 +64,15 @@ def nextFlashcard(form):
         json_data = json.dumps({"id":id, "char":char,"answer":answer})
     return json_data
 
-def nextReader(form):
+def nextReader(form, count):
     cur = conn.cursor()
-    count = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
+    total = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     if not form["id"] or not (not form["answer"]):
         updateUsage(form, cur)
-        if not form['id'] or int(form['id']) + 1 > count: currId = 0
+        if not form['id']: currId = count
+        elif int(form['id']) + 1 > total: currId = 0
         else: currId = int(form['id'])
         id = currId + 1
         output = cur.execute(statement, (id,)).fetchone()
@@ -118,8 +119,10 @@ def flashcard():
 
 @app.route("/reader", methods=['GET', 'POST'])
 def reader():
+    count = 0
+    if request.args.get('count') is not None: count = request.args.get('count')
     if (request.method == 'POST'):
-        return nextReader(request.form)
+        return nextReader(request.form, int(count))
     else:
         return render_template('reader.html')
 
