@@ -84,6 +84,26 @@ def nextReader(form):
         json_data = json.dumps({"id":id, "char":char,"answer":answer})
     return json_data
 
+def analyticsBase():
+    cur = conn.cursor()
+    statement = "SELECT * FROM vocabs"
+    output = cur.execute(statement).fetchall()
+    arr = []
+    for row in output:
+        if row[4] > 0: correctPer = f"{(row[5]/row[4] * 100):.1f}%"
+        else: correctPer = 'N/A'
+        result = {
+            'ID': row[0],
+            'Char': row[1],
+            'PinYin': row[2],
+            'Definition': row[3],
+            'Appearances': row[4],
+            'Correct': correctPer
+        }
+        arr.append(result)
+    print (arr[1])
+    json_data = json.dumps({"rows":arr})
+    return json_data
 
 @app.route('/', methods=['GET'])
 def index():
@@ -102,6 +122,13 @@ def reader():
         return nextReader(request.form)
     else:
         return render_template('reader.html')
+
+@app.route("/analytics", methods=['GET','POST'])
+def analytics():
+    if (request.method == 'POST'):
+        return analyticsBase()
+    else: return render_template('data.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
