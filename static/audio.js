@@ -26,9 +26,13 @@ document.getElementById("next").addEventListener("click", function () {
 
 async function flashcard(success, endpoint) {
     let id = document.getElementById("id").textContent;
-    let char = document.getElementById("audio").textContent;
+    let file = document.getElementById("audio");
     let answer = document.getElementById("answer").textContent;
     let params = new FormData();
+    let char = file.textContent;
+    if (file.querySelector('audio')) {
+        char = file.querySelector('audio').querySelector('source').getAttribute('src');
+    }
     params.append("id", id);
     params.append("audio", char);
     params.append("answer", answer);

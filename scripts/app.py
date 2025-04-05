@@ -79,12 +79,18 @@ def nextAudio(form):
         updateUsage(form, cur, 'audio')
         id = random.randint(1, count)
         output = cur.execute(statement, (id,)).fetchone()
-        json_data = json.dumps({"id":id, "audio":f"static/audio/{output[3]}.mp3", "answer":""})
+        clipNum = ''
+        if int(output[5]) > 1: clipNum = random.randint(1, int(output[5])) 
+        json_data = json.dumps({"id":id, "audio":f"static/audio/{output[3]}{clipNum}.mp3", "answer":""})
     else:
         id = form['id']
         output = cur.execute(statement, (id,)).fetchone()
-        #char = bleach.clean(form['char'])
         char = f"static/audio/{output[3]}.mp3"
+        if int(output[5]) > 1:
+            curr = form['audio']
+            try: curr = int(form['audio'][-5:-4])
+            except: curr = 1
+            char = f"static/audio/{output[3]}{curr}.mp3"
         answer = f"Char: {output[1]}<br>Pinyin: {output[2]}<br>Definition: {output[4]}"
         json_data = json.dumps({"id":id, "audio":char,"answer":answer})
         print ('test')
