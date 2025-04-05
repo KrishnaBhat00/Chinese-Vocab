@@ -28,13 +28,18 @@ def create_connection(db_file):
 
 conn = create_connection(database)
 
-def updateUsage(form, cur):
+def updateUsage(form, cur, table):
     if form['success'] != 'null':
-        update = """UPDATE vocabs SET totalAsked = ?, correct = ? WHERE id=?"""
-        currentInfo = "SELECT * FROM vocabs WHERE id=?"
+        if table == "audio": update = """UPDATE audio SET totalAsked = ?, correct = ? WHERE id=?"""
+        if table == "vocabs": update = """UPDATE vocabs SET totalAsked = ?, correct = ? WHERE id=?"""
+        currentInfo = f"SELECT * FROM {table} WHERE id=?"
         output = cur.execute(currentInfo, (form['id'], )).fetchone()
-        total = int(output[4])
-        correct = int(output[5])
+        if table == 'vocabs':
+            total = int(output[4])
+            correct = int(output[5])
+        elif table == 'audio':
+            total = int(output[6])
+            correct = int(output[7])
         total += 1
         if form['success'] == 'yes':
             correct += 1
@@ -51,7 +56,7 @@ def nextFlashcard(form):
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     if not form["id"] or not (not form["answer"]):
-        updateUsage(form, cur)
+        updateUsage(form, cur, 'vocabs')
         id = random.randint(1, count)
         output = cur.execute(statement, (id,)).fetchone()
         json_data = json.dumps({"id":id, "char":output[1], "answer":""})
@@ -64,13 +69,36 @@ def nextFlashcard(form):
         json_data = json.dumps({"id":id, "char":char,"answer":answer})
     return json_data
 
+def nextAudio(form):
+    print(form)
+    cur = conn.cursor()
+    count = cur.execute("SELECT Count(*) FROM audio").fetchone()[0]
+    statement = "SELECT * FROM audio WHERE id=?"
+    output = ""
+    if not form["id"] or not (not form["answer"]):
+        updateUsage(form, cur, 'audio')
+        id = random.randint(1, count)
+        output = cur.execute(statement, (id,)).fetchone()
+        json_data = json.dumps({"id":id, "audio":f"static/audio/{output[3]}.mp3", "answer":""})
+    else:
+        id = form['id']
+        output = cur.execute(statement, (id,)).fetchone()
+        #char = bleach.clean(form['char'])
+        char = f"static/audio/{output[3]}.mp3"
+        answer = f"Char: {output[1]}<br>Pinyin: {output[2]}<br>Definition: {output[4]}"
+        json_data = json.dumps({"id":id, "audio":char,"answer":answer})
+        print ('test')
+    return json_data
+
+
+
 def nextReader(form, count):
     cur = conn.cursor()
     total = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
     statement = "SELECT * FROM vocabs WHERE id=?"
     output = ""
     if not form["id"] or not (not form["answer"]):
-        updateUsage(form, cur)
+        updateUsage(form, cur, 'vocabs')
         if not form['id']: currId = count
         elif int(form['id']) + 1 > total: currId = 0
         else: currId = int(form['id'])
@@ -114,8 +142,7 @@ def index():
 def flashcard():
     if (request.method == 'POST'):
         return nextFlashcard(request.form)
-    else:
-        return render_template('flashcard.html')
+    return render_template('flashcard.html')
 
 @app.route("/reader", methods=['GET', 'POST'])
 def reader():
@@ -123,14 +150,20 @@ def reader():
     if request.args.get('count') is not None: count = request.args.get('count')
     if (request.method == 'POST'):
         return nextReader(request.form, int(count))
-    else:
-        return render_template('reader.html')
+    return render_template('reader.html')
 
 @app.route("/analytics", methods=['GET','POST'])
 def analytics():
     if (request.method == 'POST'):
         return analyticsBase()
-    else: return render_template('data.html')
+    return render_template('data.html')
+
+
+@app.route("/audio", methods=['GET', 'POST'])
+def audio():
+    if (request.method == 'POST'):
+        return nextAudio(request.form)
+    return render_template('audio.html')
 
 
 if __name__ == '__main__':
