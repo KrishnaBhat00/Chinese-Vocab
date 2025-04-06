@@ -5,9 +5,10 @@ This is a project I made to help me learn/relearn Chinese through translating th
 This project should not be used unless you have prior Chinese experience because it does not contain basic words like "我".
 Alternatively, other vocabulary sets can be changed through the 'Chinese Vocab Community.xlsx' file. 
 
-App.py runs a Flask web app locally. Includes a flashcard move (`/flashcard`), chronological mode (`/reader`), and analytics (`/analyitcs`) - search/filters coming soon.
+App.py runs a Flask web app locally. Includes a flashcard mode (`/flashcard`), chronological mode (`/reader`), and analytics (`/analyitcs`) - search/filters coming soon.
 
-PinYin training in the works.
+Now features a method to test hearing with `/audio`.
+
 
 TODO:
 - search
