@@ -17,8 +17,8 @@ function removeSuccessBttns() {
 }
 
 document.getElementById("next").addEventListener("click", function () {
-    endpoint = window.location.href;
-    endpoint = endpoint.split("/")[3];
+    endpoint = window.location.pathname.substring(1);
+    // endpoint = endpoint.split("/")[3];
     flashcard(null, endpoint);
 
 });

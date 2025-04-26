@@ -15,6 +15,10 @@ static = os.path.join(path, "static")
 app = Flask(__name__,template_folder=templates,static_folder=static)
 
 database = os.path.join(path, "databases", "vocabs.db")
+rangeIds = {
+    "min" : 0,
+    "max" : 0
+}
 
 def create_connection(db_file):
     # create a database connection to a SQLite database
@@ -49,7 +53,7 @@ def updateUsage(form, cur, table):
         conn.commit()
 
 
-def nextFlashcard(form):
+def nextFlashcard(form, rangeIds):
     print(form)
     cur = conn.cursor()
     count = cur.execute("SELECT Count(*) FROM vocabs").fetchone()[0]
@@ -57,7 +61,12 @@ def nextFlashcard(form):
     output = ""
     if not form["id"] or not (not form["answer"]):
         updateUsage(form, cur, 'vocabs')
-        id = random.randint(1, count)
+        if rangeIds == None: id = random.randint(1, count)
+        else: 
+            minGrind = max(int(rangeIds['min']), 0)
+            maxGrind = min(int(rangeIds['max']), count)
+            if minGrind > maxGrind: maxGrind = minGrind
+            id = random.randint(minGrind, maxGrind)
         output = cur.execute(statement, (id,)).fetchone()
         json_data = json.dumps({"id":id, "char":output[1], "answer":""})
     else:
@@ -65,7 +74,7 @@ def nextFlashcard(form):
         output = cur.execute(statement, (id,)).fetchone()
         #char = bleach.clean(form['char'])
         char = output[1]
-        answer = f"Pinyin: {output[2]}<br>Definition: {output[3]}"
+        answer = f"{output[2]}<br>{output[3]}"
         json_data = json.dumps({"id":id, "char":char,"answer":answer})
     return json_data
 
@@ -147,8 +156,19 @@ def index():
 @app.route("/flashcard", methods=['GET', 'POST'])
 def flashcard():
     if (request.method == 'POST'):
-        return nextFlashcard(request.form)
+        return nextFlashcard(request.form, None)
     return render_template('flashcard.html')
+
+@app.route("/flashcard/grind", methods=['GET', 'POST'])
+def grind():
+    if request.method == 'GET':
+        rangeIds['min'] = request.args.get('min')
+        rangeIds['max'] = request.args.get('max')
+    if (request.method == 'POST'):
+        print (rangeIds)
+        return nextFlashcard(request.form, rangeIds)
+    return render_template('flashcard.html')
+
 
 @app.route("/reader", methods=['GET', 'POST'])
 def reader():
